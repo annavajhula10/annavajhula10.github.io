@@ -57,16 +57,33 @@ article.active {
   transform: translateY(0);
 }
 
-.icon-box,
 .service-icon-box {
   opacity: 0;
   transform: scale(0.8);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
-.scroll-visible .icon-box,
-.scroll-visible .service-icon-box,
 .service-item.scroll-visible .service-icon-box {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Sidebar icon boxes should always be visible */
+.sidebar .icon-box,
+.contacts-list .icon-box {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Timeline icon boxes animate on scroll */
+.timeline .icon-box {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.timeline-item.scroll-visible .icon-box,
+.scroll-visible .timeline .icon-box {
   opacity: 1;
   transform: scale(1);
 }
@@ -91,7 +108,7 @@ article.active {
 .download-resume-btn:hover {
   background: var(--orange-yellow-crayola);
   color: var(--smoky-black);
-  box-shadow: 0 0 20px rgba(255, 209, 92, 0.4);
+  box-shadow: 0 0 20px rgba(0, 206, 200, 0.5);
   transform: translateY(-2px);
 }
 
@@ -113,7 +130,7 @@ article.active {
    * colors
    */
 
-  /* gradient */
+  /* gradient - Custom Color Scheme */
 
   --bg-gradient-onyx: linear-gradient(
     to bottom right, 
@@ -127,13 +144,13 @@ article.active {
   ), hsl(240, 2%, 13%);
   --bg-gradient-yellow-1: linear-gradient(
     to bottom right, 
-    hsl(45, 100%, 71%) 0%, 
-    hsla(36, 100%, 69%, 0) 50%
+    #00CEC8 0%, 
+    rgba(0, 206, 200, 0) 50%
   );
   --bg-gradient-yellow-2: linear-gradient(
     135deg, 
-    hsla(45, 100%, 71%, 0.251) 0%, 
-    hsla(35, 100%, 68%, 0) 59.86%
+    rgba(0, 206, 200, 0.251) 0%, 
+    rgba(255, 156, 95, 0) 59.86%
   ), hsl(240, 2%, 13%);
   --border-gradient-onyx: linear-gradient(
     to bottom right, 
@@ -142,11 +159,12 @@ article.active {
   );
   --text-gradient-yellow: linear-gradient(
     to right, 
-    hsl(45, 100%, 72%), 
-    hsl(35, 100%, 68%)
+    #00CEC8, 
+    #FF9C5F
   );
 
-  /* solid */
+  /* solid - Custom Color Scheme */
+  /* #00CEC8 (teal), #FCEFC3 (cream), #FF9C5F (orange), #EB4203 (red-orange) */
 
   --jet: hsl(0, 0%, 22%);
   --onyx: hsl(240, 1%, 17%);
@@ -154,12 +172,12 @@ article.active {
   --eerie-black-2: hsl(240, 2%, 12%);
   --smoky-black: hsl(0, 0%, 7%);
   --white-1: hsl(0, 0%, 100%);
-  --white-2: hsl(0, 0%, 98%);
-  --orange-yellow-crayola: hsl(45, 100%, 72%);
-  --vegas-gold: hsl(45, 54%, 58%);
+  --white-2: #FCEFC3;
+  --orange-yellow-crayola: #00CEC8;
+  --vegas-gold: #FF9C5F;
   --light-gray: hsl(0, 0%, 84%);
   --light-gray-70: hsla(0, 0%, 84%, 0.7);
-  --bittersweet-shimmer: hsl(0, 43%, 51%);
+  --bittersweet-shimmer: #EB4203;
 
   /**
    * typography
@@ -247,7 +265,14 @@ input, textarea {
 
 html { font-family: var(--ff-poppins); }
 
-body { background: var(--smoky-black); }
+body { 
+  background: var(--smoky-black);
+  background-image: 
+    radial-gradient(ellipse at top left, rgba(0, 206, 200, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(235, 66, 3, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at center, rgba(255, 156, 95, 0.04) 0%, transparent 70%);
+  background-attachment: fixed;
+}
 
 
 
@@ -415,6 +440,26 @@ main {
 
 .sidebar.active { max-height: 405px; }
 
+/* Hide sidebar on mobile when not on About page */
+.sidebar.hide-on-mobile {
+  display: none;
+}
+
+/* Show full sidebar on mobile when on About page (not hidden) */
+.sidebar:not(.hide-on-mobile) {
+  max-height: none;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.sidebar:not(.hide-on-mobile) .sidebar-info_more {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar:not(.hide-on-mobile) .info_more-btn {
+  display: none;
+}
+
 .sidebar-info {
   position: relative;
   display: flex;
@@ -532,11 +577,11 @@ main {
 
 .social-list {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 40px;
   padding-bottom: 4px;
-  padding-left: 7px;
+  padding-left: 0;
 }
 
 .social-item .social-link {
@@ -1939,6 +1984,11 @@ textarea.form-input::-webkit-resizer { display: none; }
     margin-bottom: 0;
     padding-top: 60px;
     z-index: 1;
+  }
+
+  /* Always show sidebar on desktop regardless of mobile-hide class */
+  .sidebar.hide-on-mobile {
+    display: block;
   }
 
   .sidebar-info { flex-direction: column; }

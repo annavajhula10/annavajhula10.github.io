@@ -101,6 +101,15 @@ for (let i = 0; i < formInputs.length; i++) {
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
+// Function to update sidebar visibility on mobile based on active page
+function updateSidebarVisibility(activePage) {
+  if (activePage === 'about') {
+    sidebar.classList.remove('hide-on-mobile');
+  } else {
+    sidebar.classList.add('hide-on-mobile');
+  }
+}
+
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
@@ -110,6 +119,8 @@ for (let i = 0; i < navigationLinks.length; i++) {
         pages[i].classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
+        // Update sidebar visibility on mobile
+        updateSidebarVisibility(pages[i].dataset.page);
         // Reset scroll animations when switching tabs
         resetScrollAnimations();
         setTimeout(initScrollAnimations, 100);
